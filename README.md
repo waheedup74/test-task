@@ -64,3 +64,139 @@ If you discover a security vulnerability within Laravel, please send an e-mail t
 ## License
 
 The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+
+# Actor Prompt Validation API
+
+This project is a test-task implementation of an **Actor Information Extraction System**.
+It accepts a natural language **description** of an actor and automatically extracts details such as first name, last name, address, height, weight, gender, and age using regex + mock data matching.
+
+---
+
+## API Flow
+
+1. **Frontend Form / API Request**
+
+   * A user provides an email and a free-text description of an actor.
+
+2. **Validation**
+
+   * Email must be unique and valid.
+   * Description is required.
+
+3. **Data Extraction**
+
+   * The description is checked against a **mock dataset** (`storage/app/mock_actors.json`).
+   * Regex/string matching is used to extract:
+
+     * `first_name`
+     * `last_name`
+     * `address`
+     * `height`
+     * `weight`
+     * `gender`
+     * `age`
+
+4. **Result**
+
+   * If all required fields (first\_name, last\_name, address) are present, the actor is stored in the database.
+   * If fields are missing, the request returns an error message.
+
+5. **Prompt Validation Endpoint**
+
+   * `GET /api/actors/prompt-validation`
+   * Returns a simple JSON response for health-check purposes:
+
+     ```json
+     {
+       "message": "text_prompt"
+     }
+     ```
+
+---
+
+## API Endpoints
+
+### Create Actor
+
+**POST** `/actors`
+
+**Payload:**
+
+```json
+{
+  "email": "john@example.com",
+  "description": "John Doe lives at 123 Main St, New York. He is 6ft tall, weighs 75kg, male, 30 years old."
+}
+```
+
+**Response (Success Example):**
+
+```json
+{
+  "id": 1,
+  "email": "john@example.com",
+  "first_name": "John",
+  "last_name": "Doe",
+  "address": "123 Main St, New York",
+  "height": "6ft",
+  "weight": "75kg",
+  "gender": "male",
+  "age": 30
+}
+```
+
+---
+
+### List Actors
+
+**GET** `/actors`
+
+Returns all stored actors.
+
+---
+
+### Prompt Validation
+
+**GET** `/api/actors/prompt-validation`
+
+**Response:**
+
+```json
+{ "message": "text_prompt" }
+```
+
+---
+
+## Test Descriptions
+
+Use the following descriptions for testing (these match the mock dataset):
+
+1. **John Doe**
+   `"John Doe lives at 123 Main St, New York. He is 6ft tall, weighs 75kg, male, 30 years old."`
+
+2. **Emma Watson**
+   `"Emma Watson lives at 221B Baker Street, London. She is 5ft 5in tall, weighs 52kg, female, 33 years old."`
+
+3. **Chris Evans**
+   `"Chris Evans lives at 45 Hollywood Blvd, Los Angeles. He is 6ft tall, weighs 85kg, male, 42 years old."`
+
+4. **Scarlett Johansson**
+   `"Scarlett Johansson lives at 90 Sunset Blvd, Los Angeles. She is 5ft 3in tall, weighs 57kg, female, 39 years old."`
+
+5. **Robert Downey**
+   `"Robert Downey lives at 77 Iron St, Malibu. He is 5ft 9in tall, weighs 78kg, male, 58 years old."`
+
+6. **Jennifer Lawrence**
+   `"Jennifer Lawrence lives at 16 Broadway Ave, New York. She is 5ft 9in tall, weighs 62kg, female, 34 years old."`
+
+7. **Will Smith**
+   `"Will Smith lives at 100 Bel-Air Rd, Los Angeles. He is 6ft 2in tall, weighs 82kg, male, 56 years old."`
+
+8. **Natalie Portman**
+   `"Natalie Portman lives at 15 Ocean Dr, Sydney. She is 5ft 3in tall, weighs 50kg, female, 43 years old."`
+
+9. **Leonardo DiCaprio**
+   `"Leonardo DiCaprio lives at 500 Vine St, Los Angeles. He is 6ft tall, weighs 80kg, male, 50 years old."`
+
+10. **Gal Gadot**
+    `"Gal Gadot lives at 77 Wonder St, Tel Aviv. She is 5ft 10in tall, weighs 59kg, female, 40 years old."`
