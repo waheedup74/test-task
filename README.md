@@ -145,25 +145,6 @@ It accepts a natural language **description** of an actor and automatically extr
 }
 ```
 
----
-
-### List Actors
-
-**GET** `/actors`
-
-Returns all stored actors.
-
----
-
-### Prompt Validation
-
-**GET** `/api/actors/prompt-validation`
-
-**Response:**
-
-```json
-{ "message": "text_prompt" }
-```
 
 ---
 
